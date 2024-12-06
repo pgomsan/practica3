@@ -28,7 +28,7 @@ class TableEntry {
 
 	    // Sobrecarga del operador <<
 	    friend std::ostream& operator<<(std::ostream &out, const TableEntry<V> &te){
-		out << "Key: " << te.key << ", Value: " << te.value;
+		out << "('" << te.key << "' =>  " << te.value<<")";
         	return out;
 	}
 
