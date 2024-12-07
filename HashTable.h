@@ -16,29 +16,19 @@ class HashTable: public Dict<V> {
 	int max;
 	ListLinked<TableEntry<V>>* table;
 	int h(std::string key){
-		
-		int sum;
-		int resto;
-		int a;
-		char c;
-		for(int i=0; i<key.length(); i++){
-			c=key.at(i);
-			a= int(c);
-			sum+=a;
-		}
-		resto= sum%max;
+		int sum = 0;
+       	 	for (char c : key) {
+            		sum += static_cast<int>(c);
+        	}
 
-		return resto;
+        	return sum % max;
 	}
 
     public:
         HashTable(int size){
 		max = size;                 
         	n = 0;                     
-        	table = new ListLinked<TableEntry<V>>[max];       
-        	for (int i = 0; i < max; ++i) {
-            		table[i] = nullptr;   
-        	}	
+        	table = new ListLinked<TableEntry<V>>[max];       	
 	}
         ~HashTable(){
 		delete[] table;
@@ -52,31 +42,78 @@ class HashTable: public Dict<V> {
             if (th.table[i].empty()) {
                 out << "vacía";
             } else {
-                th.table[i].first();  // Apunta al primer elemento de la lista
-                while (!th.table[i].finished()) {
-                    out << th.table[i].retrieve() << " ";  // Imprime el valor del nodo actual
-                    th.table[i].next();  // Mueve al siguiente nodo
-                }
+                out << th.table[i];
             }
             out << std::endl;
         }
         return out;
 	}
-	V operator [] (std::string key){
-	int index = h(key);  // Obtener el índice de la cubeta
-        ListLinked<TableEntry<V>> &cubeta = table[index];  // Acceder a la lista enlazada correspondiente
 
-        // Buscar la clave en la cubeta
-        cubeta.first();  // Apuntar al primer nodo
-        while (!cubeta.finished()) {
-            TableEntry<V> entry = bucket.retrieve();
-            if (entry.getKey() == key) {
-                return entry.getValue();  // Devolver el valor asociado si se encuentra la clave
+// Implementación del método insert
+    void insert(std::string key, V value) override {
+        int index = h(key);
+        ListLinked<TableEntry<V>>& bucket = table[index];
+
+        for (int i = 0; i < bucket.size(); ++i) {
+            TableEntry<V> entry = bucket.get(i);
+            if (entry.key == key) {
+                throw std::runtime_error("Clave ya existente en la tabla hash.");
             }
-            bucket.next();  // Moverse al siguiente nodo
         }
 
-        // Si no se encuentra la clave, lanzar excepción
+        bucket.append(TableEntry<V>(key, value));
+        ++n;
+    }
+
+    // Implementación del método search
+    V search(std::string key) override {
+        int index = h(key);
+        ListLinked<TableEntry<V>>& bucket = table[index];
+
+        for (int i = 0; i < bucket.size(); ++i) {
+            TableEntry<V> entry = bucket.get(i);
+            if (entry.key == key) {
+                return entry.value;
+            }
+        }
+
+        throw std::runtime_error("Clave no encontrada en la tabla hash.");
+    }
+
+    // Implementación del método remove
+    V remove(std::string key) override {
+        int index = h(key);
+        ListLinked<TableEntry<V>>& bucket = table[index];
+
+        for (int i = 0; i < bucket.size(); ++i) {
+            TableEntry<V> entry = bucket.get(i);
+            if (entry.key == key) {
+                V value = entry.value;
+                bucket.remove(i);
+                --n;
+                return value;
+            }
+        }
+
+        throw std::runtime_error("Clave no encontrada en la tabla hash.");
+    }
+
+    // Devuelve el número de entradas en la tabla
+    int entries() override {
+        return n;
+    }
+
+	V operator [] (std::string key){
+        int index = h(key);
+        ListLinked<TableEntry<V>>& bucket = table[index];
+
+        for (int i = 0; i < bucket.size(); ++i) {
+            TableEntry<V> entry = bucket.get(i);
+            if (entry.key == key) {
+                return entry.value;
+            }
+        }
+
         throw std::runtime_error("Clave no encontrada en la tabla hash.");
 	}
 
