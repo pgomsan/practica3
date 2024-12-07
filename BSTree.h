@@ -114,7 +114,7 @@ class BSTree {
 
 	//Eliminacion
 	template<typename T>
-	BSNode<T>* BSTree<T>::remove(BSNode<T>* n, T e){
+	BSNode<T>* BSTree<T>::remove(BSNode<T>* n, const T& e){
 			if(n==NULL){
 				throw std::runtime_error("Elemento no encontrado");
 			}
