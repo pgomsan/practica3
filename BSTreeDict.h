@@ -8,60 +8,67 @@
 #include "TableEntry.h"
 
 template <typename V>
-class BSTreeDict: public Dict<V> {
+class BSTreeDict : public Dict<V> {
 
-    private:
-        BSTree<TableEntry<V>>* tree;
+private:
+    BSTree<TableEntry<V>>* tree;
 
-    public:
-       BSTreeDict(){
-       	tree = new BSTree<TableEntry<V>>();
-       }
+public:
+    // Constructor
+    BSTreeDict() {
+        tree = new BSTree<TableEntry<V>>();
+    }
 
-       ~BSTreeDict(){
-       	delete tree;
-       }
+    // Destructor
+    ~BSTreeDict() {
+        delete tree;
+    }
 
-       friend std::ostream& operator<<(std::ostream &out, const BSTreeDict<V> &bs){
-	       
-                out << *(bs.tree);
+    // Sobrecarga del operador <<
+    friend std::ostream& operator<<(std::ostream& out, const BSTreeDict<V>& bs) {
+        out << *(bs.tree);
         return out;
-	}
-       }
+    }
 
-       V operator[](const std::string& key) const {
-       		return search(key);
-       }
-       
-       void insert(std::string key, V value) override {
-		TableEntry<V> entry(key, value);
-        	tree->insert(entry);
-       }
+    // Sobrecarga del operador []
+    V operator[](std::string key) {
+        return search(key);
+    }
 
-	V search(std::string key)const override {
-		TableEntry<V> entry(key);
-        	try {
-            		TableEntry<V> result = tree->search(entry);
-            		return result.value;
-        	} catch (const std::runtime_error&) {
-            		throw std::runtime_error("Clave no encontrada");
-        	}
-	}
+    // Insertar un elemento
+    void insert(std::string key, V value) override {
+        TableEntry<V> entry(key, value);
+        tree->insert(entry);
+    }
 
-	V remove(std::string key) override {
-		TableEntry<V> entry(key);
-        	try {
-            		TableEntry<V> result = tree->search(entry);
-            		tree->remove(entry);
-            		return result.value;
-        	} catch (const std::runtime_error&) {
-            		throw std::runtime_error("Clave no encontrada");
-        	}
-	}
+    // Buscar un elemento
+    V search(std::string key) override {
+        TableEntry<V> entry(key);
+        try {
+            TableEntry<V> result = tree->search(entry);
+            return result.value;
+        } catch (const std::runtime_error& e) {
+            throw std::runtime_error("Clave no encontrada: " + key);
+        }
+    }
 
-	int entries() const override {
-		return tree->size();
-	}
-};	
+    // Eliminar un elemento
+    V remove(std::string key) override {
+        TableEntry<V> entry(key);
+        try {
+            TableEntry<V> result = tree->search(entry);
+            tree->remove(entry);
+            return result.value;
+        } catch (const std::runtime_error& e) {
+            throw std::runtime_error("Clave no encontrada: " + key);
+        }
+    }
+
+    // Número de entradas
+    int entries() override {
+        return tree->size();
+    }
+};
 
 #endif
+
