@@ -15,19 +15,16 @@ class BSTreeDict: public Dict<V> {
 
     public:
        BSTreeDict(){
-       	tree = new BSTree<TableEntry<V>>[];
+       	tree = new BSTree<TableEntry<V>>();
        }
 
        ~BSTreeDict(){
-       	delete[] tree;
+       	delete tree;
        }
 
        friend std::ostream& operator<<(std::ostream &out, const BSTreeDict<V> &bs){
-	        for (int i = 0; i < bs.nelem; ++i) {
-                out << bs.tree[i];
-            }
-            out << std::endl;
-        }
+	       
+                out << *(bs.tree);
         return out;
 	}
        }
@@ -37,18 +34,33 @@ class BSTreeDict: public Dict<V> {
        }
        
        void insert(std::string key, V value) override {
-
+		TableEntry<V> entry(key, value);
+        	tree->insert(entry);
        }
 
 	V search(std::string key) override {
-	
+		TableEntry<V> entry(key);
+        	try {
+            		TableEntry<V> result = tree->search(entry);
+            		return result.value;
+        	} catch (const std::runtime_error& e) {
+            		throw std::runtime_error("Clave no encontrada");
+        	}
 	}
 
 	V remove(std::string key) override {
-	
+		TableEntry<V> entry(key);
+        	try {
+            		TableEntry<V> result = tree->search(entry);
+            		tree->remove(entry);
+            		return result.value;
+        	} catch (const std::runtime_error& e) {
+            		throw std::runtime_error("Clave no encontrada");
+        	}
 	}
 
 	int entries() override {
+		return tree->size();
 	}
 };	
 
