@@ -29,7 +29,7 @@ class BSTreeDict: public Dict<V> {
 	}
        }
 
-       V operator[](std::string key){
+       V operator[](const std::string& key) const {
        		return search(key);
        }
        
@@ -38,12 +38,12 @@ class BSTreeDict: public Dict<V> {
         	tree->insert(entry);
        }
 
-	V search(std::string key) override {
+	V search(std::string key)const override {
 		TableEntry<V> entry(key);
         	try {
             		TableEntry<V> result = tree->search(entry);
             		return result.value;
-        	} catch (const std::runtime_error& e) {
+        	} catch (const std::runtime_error&) {
             		throw std::runtime_error("Clave no encontrada");
         	}
 	}
@@ -54,12 +54,12 @@ class BSTreeDict: public Dict<V> {
             		TableEntry<V> result = tree->search(entry);
             		tree->remove(entry);
             		return result.value;
-        	} catch (const std::runtime_error& e) {
+        	} catch (const std::runtime_error&) {
             		throw std::runtime_error("Clave no encontrada");
         	}
 	}
 
-	int entries() override {
+	int entries() const override {
 		return tree->size();
 	}
 };	
