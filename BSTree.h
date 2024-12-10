@@ -158,5 +158,28 @@ void BSTree<T>::delete_cascade(BSNode<T>* n) {
         delete n;
     }
 }
+/*
+void print_postorder(std::ostream &out, BSNode<T>* node) const {
+    if (node == nullptr) return; // Caso base
+    print_postorder(out, node->left); // Recorre subárbol izquierdo
+    print_postorder(out, node->right); // Recorre subárbol derecho
+    out << node->elem << " "; // Imprime el nodo actual
+}
+
+void print_postorder(std::ostream &out) const {
+    print_postorder(out, root); // Llama a la versión privada
+}
+*/
+
+/*
+int depth(BSNode<T>* node) const {
+    if (node == nullptr) return 0; // Caso base
+    return 1 + std::max(depth(node->left), depth(node->right)); // Calcula la profundidad recursivamente
+}
+
+int depth() const {
+    return depth(root); // Llama a la versión privada
+}
+*/
 
 #endif

@@ -120,4 +120,27 @@ class HashTable: public Dict<V> {
         
 };
 
+/*
+// Devuelve todas las claves almacenadas en la tabla
+std::vector<std::string> export_keys() {
+    std::vector<std::string> keys; // Vector para almacenar las claves
+    for (int i = 0; i < max; ++i) { // Recorre todas las cubetas
+        for (int j = 0; j < table[i].size(); ++j) { // Recorre cada lista enlazada
+            keys.push_back(table[i].get(j).key); // Obtiene la clave y la añade al vector
+        }
+    }
+    return keys; // Devuelve el vector de claves
+}
+
+// Calcula y devuelve el factor de carga
+double load_factor() {
+    return static_cast<double>(n) / max; // n = número de elementos, max = número de cubetas
+}
+
+
+*/
+
+
+
+
 #endif
