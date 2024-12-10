@@ -182,4 +182,101 @@ int depth() const {
 }
 */
 
+/*
+// Cálculo de la altura del árbol
+template <typename T>
+int BSTree<T>::height(BSNode<T>* n) const {
+    if (n == nullptr) {
+        return -1; // Un árbol vacío tiene altura -1
+    }
+    int leftHeight = height(n->left);
+    int rightHeight = height(n->right);
+    return 1 + std::max(leftHeight, rightHeight);
+}
+
+int height() const {
+    return height(root);
+}
+Implementa un método `loadFactor()` en `HashTable` que calcule el factor de carga de la tabla.
+
+**Respuesta:**
+```cpp
+// Factor de carga
+// Formula: loadFactor = número de elementos / número de cubetas
+
+double loadFactor() const {
+    return static_cast<double>(n) / max;
+}
+
+// Verifica si el árbol está balanceado
+// Un árbol está balanceado si la diferencia de alturas entre
+// los subárboles izquierdo y derecho de cada nodo es como máximo 1
+
+template <typename T>
+bool BSTree<T>::isBalanced(BSNode<T>* n) const {
+    if (n == nullptr) return true;
+
+    int leftHeight = height(n->left);
+    int rightHeight = height(n->right);
+
+    return std::abs(leftHeight - rightHeight) <= 1
+        && isBalanced(n->left)
+        && isBalanced(n->right);
+}
+
+bool isBalanced() const {
+    return isBalanced(root);
+}
+
+// Obtiene las claves en orden ascendente
+
+// Método privado recursivo
+template <typename T>
+void BSTree<T>::getKeysInOrder(BSNode<T>* n, std::vector<T>& keys) const {
+    if (n != nullptr) {
+        getKeysInOrder(n->left, keys);
+        keys.push_back(n->elem);
+        getKeysInOrder(n->right, keys);
+    }
+}
+
+2. Implementa esta funcionalidad en `BSTreeDict`:
+```cpp
+std::vector<std::string> getKeysInOrder() {
+    std::vector<TableEntry<V>> entries = tree->getKeysInOrder();
+    std::vector<std::string> keys;
+    for (const auto& entry : entries) {
+        keys.push_back(entry.key);
+    }
+    return keys;
+}
+```
+
+#### **5. Integración y análisis en `BSTreeDict`**
+**Pregunta:**
+Implementa una función llamada `merge` en `BSTreeDict` que tome como parámetro otro diccionario de tipo `BSTreeDict` y combine sus elementos con el diccionario actual. Si hay claves duplicadas, debe prevalecer el valor del diccionario que invocó el método.
+
+**Respuesta:**
+```cpp
+// Fusiona dos BSTreeDict
+// En caso de conflicto de claves, prevalece el valor del diccionario original
+
+void merge(const BSTreeDict<V>& other) {
+    std::vector<TableEntry<V>> otherEntries = other.tree->getKeysInOrder();
+
+    for (const auto& entry : otherEntries) {
+        try {
+            this->insert(entry.key, entry.value);
+        } catch (...) {
+            // Si la clave ya existe, ignorar
+        }
+    }
+}
+```
+
+
+
+
+*/
+
 #endif
